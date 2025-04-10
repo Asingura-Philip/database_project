@@ -136,10 +136,14 @@ INSERT INTO Farmers (FarmerID, Name, ContactInfo, Address) VALUES
 (9, 'Mason Brown', '901-234-5678', 'Elm St 20, Lakeview'),
 (10, 'Ava Martinez', '012-345-6789', 'Birch St 100, Oakhill');
 
+select * from farmers;
+
 INSERT INTO Managers (ManagerID, Name, ContactInfo) VALUES
 (1, 'Daniel King', '111-222-3333'),
 (2, 'Rachel Adams', '222-333-4444'),
 (3, 'Michael Clark', '333-444-5555');
+
+select * from managers;
 
 INSERT INTO Storekeepers (StoreKeeperID, Name, ContactInfo) VALUES
 (1, 'George Walker', '444-555-6666'),
@@ -155,6 +159,8 @@ INSERT INTO StorageUnits (StorageUnitID, StoreKeeperID, Location, Temperature, H
 (2, 2, 'Unit B - Zone 2', 20.0, 65, 200, 120),
 (3, 1, 'Unit C - Zone 3', 15.0, 55, 150, 80),
 (4, 2, 'Unit D - Zone 4', 19.0, 70, 180, 150);
+
+select * from StorageUnits;
 
 INSERT INTO DryingUnits (DryingUnitID, DryingExpertID, Location, Capacity) VALUES
 (1, 1, 'Dryer Room 1 - North Wing', 100),
@@ -182,6 +188,7 @@ INSERT INTO Produces (ProduceID, FarmerID, Type, Quantity, ServiceRequired, Entr
 (9, 9, 'Wheat', 30, 'Storage', '2025-03-30', 9),
 (10, 10, 'Rice', 50, 'Drying', '2025-04-01', NULL);
 
+select * from produces where produceid = 8;
 -- Insert records for stored produce
 INSERT INTO StoredProduces (ProduceID, StorageUnitID, StorageDurationWeeks) VALUES
 (1, 1, 12),
@@ -190,6 +197,7 @@ INSERT INTO StoredProduces (ProduceID, StorageUnitID, StorageDurationWeeks) VALU
 (6, 4, 6),
 (8, 1, 14),
 (9, 2, 9);
+select * from storedproduces where storageunitid = 1;
 
 -- Insert records for dried produce
 INSERT INTO DriedProduces (ProduceID, BatchNumber, DryingDuration) VALUES
