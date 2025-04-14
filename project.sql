@@ -215,13 +215,71 @@ INSERT INTO Batches (BatchNumber, DryingUnitID, StartDate, EndDate, Status) VALU
 
 
 
+-- Create roles
+CREATE ROLE manager;
+CREATE ROLE storekeeper;
+CREATE ROLE drying_expert;
+CREATE ROLE admin;
+
+-- Grant privileges
+GRANT SELECT, INSERT, UPDATE ON Farmers TO manager;
+GRANT SELECT, INSERT, UPDATE ON Produces TO manager;
+
+GRANT SELECT, UPDATE ON StorageUnits TO storekeeper;
+GRANT INSERT ON StorageConditions TO storekeeper;
+
+GRANT SELECT, INSERT, UPDATE ON DryingBatch TO drying_expert;
+GRANT INSERT ON DryerMachine TO drying_expert;
+
+GRANT ALL PRIVILEGES ON *.* TO admin WITH GRANT OPTION;
+
+
+
+CREATE VIEW View_StorageUnitStatus AS
+SELECT s.storage_unit_id, p.produce_id, p.type, sp.entry_date, sp.storage_duration_weeks
+FROM StoredProduce sp
+JOIN Produce p ON p.produce_id = sp.produce_id
+JOIN StorageUnit s ON s.storage_unit_id = sp.storage_unit_id;
+
+CREATE VIEW View_ManagerData AS
+SELECT f.farmer_id, f.name AS farmer_name, p.produce_id, p.type, p.quantity_in_bags
+FROM Farmer f
+JOIN Produce p ON f.farmer_id = p.farmer_id;
+
+
+
+DELIMITER //
+CREATE PROCEDURE AddProduce (
+    IN farmer INT,
+    IN manager INT,
+    IN type VARCHAR(100),
+    IN quantity INT,
+    IN size DECIMAL(5,2),
+    IN storage BOOLEAN,
+    IN drying BOOLEAN
+)
+BEGIN
+    INSERT INTO Produce(farmer_id, manager_id, type, quantity_in_bags, size_per_bag_kg, for_storage, for_drying)
+    VALUES (farmer, manager, type, quantity, size, storage, drying);
+END;
+//
+DELIMITER ;
 
 
 
 
-
-
-
+DELIMITER //
+CREATE PROCEDURE CreateInvoice (
+    IN farmer_id INT,
+    IN total DECIMAL(10,2),
+    IN details TEXT
+)
+BEGIN
+    INSERT INTO Invoice (farmer_id, issue_date, total_amount, details)
+    VALUES (farmer_id, CURDATE(), total, details);
+END;
+//
+DELIMITER ;
 
 
 
